@@ -11,6 +11,7 @@ const userSchema = mongoose.Schema({
       message : (props) => `${props.value} isn't an email`
     }
   },
+  number : {type : String, required : true},
   password: { type: String, required: true },
   profilePic : String,
 });

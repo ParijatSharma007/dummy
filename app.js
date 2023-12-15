@@ -3,6 +3,8 @@ const mongoose = require('mongoose')
 const cors = require('cors');
 const morgan = require('morgan');
 const users = require('./router/users');
+const clinic = require('./router/clinic')
+const feedback = require('./router/feedback')
 
 
 const db =
@@ -24,8 +26,11 @@ mongoose.Promise = global.Promise;
 mongoose.connect(db)
 
 app.use('/users', users)
+app.use('/clinic', clinic)
+app.use("/feedback", feedback);
 
 app.use('/profilePic', express.static('profilePic'))
+app.use("/dummy", express.static("dummy"));
 
 app.use((req, res, next) => {
   const error = new Error("Page not found");
