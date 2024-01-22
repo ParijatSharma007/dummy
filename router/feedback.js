@@ -1,9 +1,10 @@
 const {Router} = require('express')
-const FeedBack = require('./feedback')
+const FeedBack = require('../model/feedback')
 
 const router = Router()
 
 router.post('/', async(req, res) => {
+  console.log("body",req.body);
     const {name, image, feedback} = req.body
     const userFeedback = new FeedBack({
         name,
@@ -13,14 +14,15 @@ router.post('/', async(req, res) => {
     userFeedback
       .save()
       .then(() => {
-        return res.status(200).json({
+        return res.status(201).json({
           message: "Feedback Submitted",
           success: true,
-          status: 200,
+          status: 201,
         });
       })
       .catch((err) => {
-        return res.status(200).json({
+        console.log(err);
+        return res.status(500).json({
           success: false,
         });
       });

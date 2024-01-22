@@ -29,22 +29,11 @@ function deleteImage(file_name){
     })
 }
 
-const fileFilter = (req, file, cb) => {
-    if(file.mimetype === 'image/jpg' || 
-    file.mimetype === 'image/jpeg' || 
-    file.mimetype === 'image/png'){
-        return cb(null, true)
-    }
-    else{
-        return cb(null, false)
-    }
-}
 
 const profilePic = multer({
     storage,
     limits : {
-        fileSize : 5 * 1024 * 1024,
-        fileFilter
+        fileSize : 15 * 1024 * 1024,
     }
 })
 
@@ -52,7 +41,8 @@ const router = Router()
 
 router.post("/signup", profilePic.single("profilePic"), (req, res, next) => {
     const userInput = req.body
-    console.log(userInput);
+    console.log("userinput",userInput);
+    console.log("userinput", req.file);
     if(!req.file){
         const user = {
             name : userInput.name,
@@ -66,7 +56,7 @@ router.post("/signup", profilePic.single("profilePic"), (req, res, next) => {
         if(doc){
             deleteImage(req.file.filename)
             return res.status(422).json({
-                type : "email",
+                field : "email",
                 message : "Email already exists",
                 success : false
             })
@@ -112,7 +102,7 @@ router.use((user, req, res, next) => {
             return res.status(401).json({
               message: "Email is already exists",
               success: false,
-              type : "email"
+              field : "email"
             });
         }
         bcrypt.hash(user.password, 10, (err, hash) => {
@@ -158,7 +148,8 @@ router.post("/login", (req, res, next) => {
       if (!doc) {
         return res.status(401).json({
           message: "Email doesn't exist",
-          success: false
+          success: false,
+          field : "email"
         });
       }
       bcrypt.compare(req.body.password, doc.password, (err, result) => {
@@ -183,7 +174,7 @@ router.post("/login", (req, res, next) => {
           });
         } else {
           return res.status(401).json({
-            type : "password",
+            field : "password",
             message: "Wrong Password",
             success: false
           });

@@ -5,6 +5,7 @@ const morgan = require('morgan');
 const users = require('./router/users');
 const clinic = require('./router/clinic')
 const feedback = require('./router/feedback')
+const pet = require('./router/petGallery')
 
 
 const db =
@@ -28,6 +29,7 @@ mongoose.connect(db)
 app.use('/users', users)
 app.use('/clinic', clinic)
 app.use("/feedback", feedback);
+app.use("/pet", pet)
 
 app.use('/profilePic', express.static('profilePic'))
 app.use("/dummy", express.static("dummy"));

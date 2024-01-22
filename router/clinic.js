@@ -18,7 +18,7 @@ router.get("/", async (req, res) => {
   }
 });
 
-router.post("/", async (req, res, next) => {
+router.get("/", async (req, res, next) => {
   const { longitude, latitude } = req.body;
   console.log(req.body);
   try {
@@ -53,6 +53,23 @@ router.post("/", async (req, res, next) => {
     });
   }
 });
+
+router.get('/:id', (req, res) => {
+  const {id} = req.params
+  Clinic.findById(id).then((doc) => {
+    return res.status(200).json({
+      success : true,
+      status : 200,
+      data : doc
+    })
+  }).catch((error) => {
+    return res.status(404).json({
+      success : false,
+      status : 404,
+      message : error.message
+    })
+  })
+})
 
 router.post("/add-location", async (req, res, next) => {
   const { location } = req.body;
